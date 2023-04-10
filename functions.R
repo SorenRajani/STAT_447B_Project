@@ -111,15 +111,28 @@ country_of_orign<- function(manufacturer){
     return(originCountry)
     }
 
-## Function to apply country_of_origin to a dataframe
+
+## Function to indicate if a car brand is luxury
+# @param manufacturer string: a vehicle manufacturer
+# @return: is_luxury_brand binary: a binary variable indicating if the manufacturer is a luxury brand
+is_luxury<- function(manufacturer){
+    luxury_brands = list("acura", "alfa-romeo", "aston-martin", "audi", "bmw", "ferrari", "harley-davidson", "infiniti",
+                         "jaguar", "land rover", "lexus", "lincoln", "mercedes-benz", "mini", "mogran", "porsche", "rover",
+                         "tesla", "volvo")
+    is_luxury_brand = ifelse(manufacturer %in% luxury_brands, 1, 0)
+
+    return(is_luxury_brand)
+    }
+
+## Function to apply country_of_origin and is_luxury to a dataframe
 # @param data dataframe: the data to retrieve the manufacturer's country of origin from, must have a columm called 'manufacturer'
-# @retrun new_data datframe: a copy of the original dataframe containing the new variable countryOrigin
+# @retrun new_data datframe: a copy of the original dataframe containing the new variable countryOrigin and is_luxury
 country_origin_transform<-function(data){
     var <- as.character(data$manufacturer)
     var[var==""] = "missing"
     data$manufacturer =  var
-    country = sapply(data$manufacturer, function(i) country_of_orign(i))
+    isLuxury = sapply(data$manufacturer, function(i) is_luxury(i))
     new_data = data%>%
-        mutate(countryOrign = country)
+        mutate(isLuxury = isLuxury)
     return(new_data)             
     }
