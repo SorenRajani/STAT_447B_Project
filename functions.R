@@ -54,5 +54,10 @@ splitData = function(Kfold, seed, datafr)
  scoreVar
 }
 
-
+## function to return vector of car ages from a dataframe
+# @param: df dataframe -the dataframe to create ages for, must have a column named price
+# @return: age vector -a column vector corresponding to car ages
+ageVehicle <- function(df){
+    year = df$year
+    return(2022 - year)}
 
