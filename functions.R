@@ -136,3 +136,14 @@ country_origin_transform<-function(data){
         mutate(isLuxury = isLuxury)
     return(new_data)             
     }
+                      
+## Function to bin off-road and and bus into other
+# @param: df dataframe: dataframe to alter
+# @return: df_binned: the original dataframe altered to have the new bins
+type_bin <- function(df){
+    vals <- df[,'type']
+    vals[vals == 'off-road'] == 'other'
+    vals[vals == 'bus'] =='other'
+    df = subset(vehicles,select = -c(type)) #this step prevents the dataframe from recalling 'bus' type should exist when using tree based methods
+    df$type = vals
+    return(df)}
