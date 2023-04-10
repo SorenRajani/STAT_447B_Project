@@ -54,5 +54,72 @@ splitData = function(Kfold, seed, datafr)
  scoreVar
 }
 
+## function to return vector of car ages from a dataframe
+# @param df dataframe -the dataframe to create ages for, must have a column named price
+# @return age vector -a column vector corresponding to car ages
+ageVehicle <- function(df){
+    year = df$year
+    return(2022 - year)}
 
+## Function to return a manufacturer's country of origin
+# @param manufacturer string: a car's manufacturing company
+# @return originCountry string: a manufacturor's country of origin
+country_of_orign<- function(manufacturer){
+    originCountry = switch(manufacturer,
+        "missing" = "missing",
+        "acura" = "Japan",
+        "alfa-romeo" = "Italy",
+        "aston-martin" = "UK",
+        "audi" = "Germany",
+        "bmw" = "Germany", 
+        "buick" = "USA",
+        "cadillac" = "USA",
+        "chevrolet" = "USA",
+        "chrysler" = "USA",
+        "dodge" = "USA",
+        "ferrari" = "Italy",
+        "fiat" = "Italy",
+        "ford" = "USA",
+        "gmc" = "USA",
+        "harley-davidson" = "USA", 
+        "honda" = "Japan",
+        "hyundai" = "South Korea",
+        "infiniti" = "Japan",
+        "jaguar" = "UK",
+        "jeep" = "USA",
+        "kia" = "South Korea",
+        "land rover" = "UK",
+        "lexus" = "Japan",
+        "lincoln" = "USA",
+        "mazda" = "Japan",
+        "mercedes-benz" = "Germany",
+        "mercury" = "USA",
+        "mini" = "UK",
+        "mitsubishi" = "Japan",
+        "mogran" = "UK",
+        "nissan" = "Japan",
+        "pontiac" = "USA",
+        "porsche" = "Germany",
+        "ram" = "USA",
+        "rover" = "UK",
+        "saturn" = "USA",
+        "subaru" = "Japan",
+        "tesla" = "USA",
+        "toyota"  = "Japan",
+        "volkswagen" = "Germany",
+        "volvo" = "Sweden")
+    return(originCountry)
+    }
 
+## Function to apply country_of_origin to a dataframe
+# @param data dataframe: the data to retrieve the manufacturer's country of origin from, must have a columm called 'manufacturer'
+# @retrun new_data datframe: a copy of the original dataframe containing the new variable countryOrigin
+country_origin_transform<-function(data){
+    var <- as.character(data$manufacturer)
+    var[var==""] = "missing"
+    data$manufacturer =  var
+    country = sapply(data$manufacturer, function(i) country_of_orign(i))
+    new_data = data%>%
+        mutate(countryOrign = country)
+    return(new_data)             
+    }
