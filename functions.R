@@ -1,3 +1,28 @@
+#' Interval score function for prediction intervals, smaller value is better #' @description
+#' Interval score for prediction intervals
+#'
+#' @param predobj has 3 (or more) columns: pointprediction, predLB, predUB
+#' @param actual corresponding vector of actual values
+# (in holdout set, for example)
+#' @param level level for prediction interval, e.g., 0.5 or 0.8
+#' @return list with
+#' summary consisting of level, average length, interval score, coverage rate #' and
+#' imiss with cases where prediction intervals don't contain actual values
+#'
+intervalScore = function(predObj,actual,level){ 
+n = nrow(predObj)
+alpha = 1- level
+ilow = (actual<predObj[,2]) # overestimation
+ihigh = (actual>predObj[,3]) # underestimation
+sumlength = sum(predObj[,3]-predObj[,2]) # sum of lengths of prediction intervals sumlow = sum(predObj[ilow,2]-actual[ilow])*2/alpha
+sumhigh = sum(actual[ihigh]-predObj[ihigh,3])*2/alpha
+avglength = sumlength/n
+IS = (sumlength+sumlow+sumhigh)/n # average length + average under/over penalties cover = mean(actual>= predObj[,2] & actual<=predObj[,3])
+summ = c(level,avglength,IS,cover) # summary with level, average length, interval score, coverage rate
+imiss = which(ilow | ihigh)
+list(summary=summ, imiss=imiss)
+}
+                      
 ## Function to perform K-fold valdiation and produces AUC measure for each fold
 #' @param kfold integer - number of folds desired
 #' @param seed integer - setting seed for reproducible folds
@@ -9,7 +34,7 @@
 #'                              4: general methods from carter() packages
 #' @param methodVar string: enters method for train() function - default = "gbm"
 #' @return AUC measure for each fold
-splitData = function(Kfold, seed, datafr)
+kFold = function(Kfold, seed, datafr)
 { set.seed(seed)
   n = nrow(datafr)
   iperm<<-sample(n) # set as global for debugging check
@@ -25,7 +50,8 @@ splitData = function(Kfold, seed, datafr)
   if(k==Kfold) { ihigh = n }
   ifold = iperm[ilow:ihigh]
   holdo = datafr[ifold,]
-  reg[[k]] = myTrain()
+  train = datafra[-ifold,]
+  reg[[k]] = myTrain(data = train)
 #    switch( switchVar, 
 #                      glm(idefault~.-id, family=binomial(link="logit"), data=datafr[-ifold,]),
 #                      randomForest(idefault~.-id, data=datafr[-ifold,], ntree = 1000,
@@ -33,7 +59,7 @@ splitData = function(Kfold, seed, datafr)
 #                      randomForest(idefault~.-id, data=datafr[-ifold,], ntree = 1000,
 #                                   importance = TRUE, proximity=TRUE, classwt = c(10,1)),
 #                      train(idefault~.-id, data = datafr[-ifold,], method = methodVar))
-  pred[[k]] = myPredict()
+  pred[[k]] = myPredict(reg[[k]],newdata = holdo)
 #    switch(switchVar, 
 #                      predict(reg[[k]], newdata=datafr[ifold,],type = "response"),
 #                      predict(reg[[k]], newdata=datafr[ifold,]),
@@ -47,7 +73,7 @@ splitData = function(Kfold, seed, datafr)
 #                        roc(datafr[ifold,]$idefault, as.numeric(pred[[k]])))
   
 #   aucVar[[k]] = auc(rocVar[[k]])
-   scoreVar[[k]] = myScore()
+   scoreVar[[k]] = myScore(pred[[k]],holdo)
   }
   # list(reg=reg, pred=pred)
   ##aucVar
@@ -168,3 +194,4 @@ wrangling_function<- function(data){
     select(-year)
     return(new_data)
     }
+
