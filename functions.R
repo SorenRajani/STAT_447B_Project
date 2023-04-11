@@ -113,9 +113,11 @@ country_of_orign<- function(manufacturer){
 
 ## Function to return whether a car is domestic (USA) or foreign
 # @param originCountry string: a car's country of origin
-# @return is_domestic_manufacturer binary: a binary variable indicating if the manufacturer is a domestic brand
+# @return is_domestic_manufacturer string: a string variable indicating if the manufacturer is a domestic brand
 is_domestic<- function(originCountry){
-    is_domestic_manufacturer = ifelse(originCountry == "USA", 1, 0)
+    if (originCountry == "USA") is_domestic_manufacturer = "domestic"
+    else if (originCountry == "missing") is_domestic_manufacturer = "missing"
+    else is_domestic_manufacturer = "foreign"
     return(is_domestic_manufacturer)
     }
 
@@ -154,3 +156,15 @@ type_bin <- function(df){
     df = subset(vehicles,select = -c(type)) #this step prevents the dataframe from recalling 'bus' type should exist when using tree based methods
     df$type = vals
     return(df)}
+                      
+## Function to collectively perform all wrangling necessary 
+# @param: data dataframe: dataframe to be wrangled, must include columns - "manufacturer", "type" & "year"
+wrangling_function<- function(data){
+    new_data = type_bin(data)
+    new_data = country_origin_transform(new_data)
+    new_data = is_luxury_transform(new_data)
+    new_data = ageVehicle(new_data)
+    new_data = new_data%>%
+    select(-year)
+    return(new_data)
+    }
