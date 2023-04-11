@@ -14,13 +14,15 @@ n = nrow(predObj)
 alpha = 1- level
 ilow = (actual<predObj[,2]) # overestimation
 ihigh = (actual>predObj[,3]) # underestimation
-sumlength = sum(predObj[,3]-predObj[,2]) # sum of lengths of prediction intervals sumlow = sum(predObj[ilow,2]-actual[ilow])*2/alpha
+sumlength = sum(predObj[,3]-predObj[,2]) # sum of lengths of prediction intervals 
+sumlow = sum(predObj[ilow,2]-actual[ilow])*2/alpha
 sumhigh = sum(actual[ihigh]-predObj[ihigh,3])*2/alpha
 avglength = sumlength/n
-IS = (sumlength+sumlow+sumhigh)/n # average length + average under/over penalties cover = mean(actual>= predObj[,2] & actual<=predObj[,3])
+IS = (sumlength+sumlow+sumhigh)/n # average length + average under/over penalties 
+cover = mean(actual>= predObj[,2] & actual<=predObj[,3])
 summ = c(level,avglength,IS,cover) # summary with level, average length, interval score, coverage rate
 imiss = which(ilow | ihigh)
-list(summary=summ, imiss=imiss)
+list(summary=summ)
 }
                       
 ## Function to perform K-fold valdiation and produces AUC measure for each fold
@@ -50,8 +52,8 @@ kFold = function(Kfold, seed, datafr)
   if(k==Kfold) { ihigh = n }
   ifold = iperm[ilow:ihigh]
   holdo = datafr[ifold,]
-  train = datafra[-ifold,]
-  reg[[k]] = myTrain(data = train)
+  train = datafr[-ifold,]
+  reg[[k]] = myTrain(data = as.data.frame(train))
 #    switch( switchVar, 
 #                      glm(idefault~.-id, family=binomial(link="logit"), data=datafr[-ifold,]),
 #                      randomForest(idefault~.-id, data=datafr[-ifold,], ntree = 1000,
@@ -220,3 +222,4 @@ feature_selection = function(data){
     return(new_data)
     }
 
+## 
