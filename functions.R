@@ -111,6 +111,13 @@ country_of_orign<- function(manufacturer){
     return(originCountry)
     }
 
+## Function to return whether a car is domestic (USA) or foreign
+# @param originCountry string: a car's country of origin
+# @return is_domestic_manufacturer binary: a binary variable indicating if the manufacturer is a domestic brand
+is_domestic<- function(originCountry){
+    is_domestic_manufacturer = ifelse(originCountry == "USA", 1, 0)
+    return(is_domestic_manufacturer)
+    }
 
 ## Function to indicate if a car brand is luxury
 # @param manufacturer string: a vehicle manufacturer
