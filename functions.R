@@ -209,8 +209,8 @@ wrangling_function<- function(data){
     new_data = mutate(new_data, age =  ageVehicle(new_data))
     
     new_data = mutate(new_data, countryOrigin = as.character(countryOrigin))%>%
-    mutate_if(sapply(., is.character), as.factor) %>% #factorizes <chr> variables
-
+    mutate_if(sapply(., is.character), as.factor) #factorizes <chr> variables
+    new_data = subset(new_data, select = -c(year))
     return(new_data)
     }
 
