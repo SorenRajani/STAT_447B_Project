@@ -134,7 +134,8 @@ country_of_orign<- function(manufacturer){
         "toyota"  = "Japan",
         "volkswagen" = "Germany",
         "volvo" = "Sweden")
-    return(originCountry)
+    return(unlist(originCountry, use.names = FALSE))
+    
     }
 
 ## Function to return whether a car is domestic (USA) or foreign
@@ -205,7 +206,10 @@ wrangling_function<- function(data){
 
     new_data = is_luxury_transform(new_data)
 
-    mutate(new_data, age =  ageVehicle(new_data))
+    new_data = mutate(new_data, age =  ageVehicle(new_data))
+    
+    new_data = mutate(new_data, countryOrigin = as.character(countryOrigin))%>%
+    mutate_if(sapply(., is.character), as.factor) %>% #factorizes <chr> variables
 
     return(new_data)
     }
