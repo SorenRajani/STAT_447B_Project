@@ -213,4 +213,10 @@ wrangling_function<- function(data){
     new_data = subset(new_data, select = -c(year))
     return(new_data)
     }
+                      
+## Function to perform feature selection and return dataset
+feature_selection = function(data){
+    new_data = subset(data, select = c(age, fuel, drive, type, manufacturer))
+    return(new_data)
+    }
 
