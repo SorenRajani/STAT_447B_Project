@@ -159,10 +159,23 @@ is_luxury<- function(manufacturer){
     return(is_luxury_brand)
     }
 
-## Function to apply country_of_origin and is_luxury to a dataframe
+## Function to apply country_of_origin to a dataframe
 # @param data dataframe: the data to retrieve the manufacturer's country of origin from, must have a columm called 'manufacturer'
-# @retrun new_data datframe: a copy of the original dataframe containing the new variable countryOrigin and is_luxury
+# @retrun new_data datframe: a copy of the original dataframe containing the new variable countryOrigin
 country_origin_transform<-function(data){
+    var <- as.character(data$manufacturer)
+    var[var==""] = "missing"
+    data$manufacturer =  var
+    country = sapply(data$manufacturer, function(i) country_of_orign(i))
+    new_data = data%>%
+        mutate(countryOrigin = country)
+    return(new_data)             
+    }
+                      
+## Function to apply is_luxury to a dataframe
+# @param data dataframe: the data to retrieve the manufacturer's country of origin from, must have a columm called 'manufacturer'
+# @retrun new_data datframe: a copy of the original dataframe containing the new variable is_luxury
+is_luxury_transform<-function(data){
     var <- as.character(data$manufacturer)
     var[var==""] = "missing"
     data$manufacturer =  var
@@ -179,7 +192,7 @@ type_bin <- function(df){
     vals <- df[,'type']
     vals[vals == 'off-road'] == 'other'
     vals[vals == 'bus'] =='other'
-    df = subset(vehicles,select = -c(type)) #this step prevents the dataframe from recalling 'bus' type should exist when using tree based methods
+    df = subset(df,select = -c(type)) #this step prevents the dataframe from recalling 'bus' type should exist when using tree based methods
     df$type = vals
     return(df)}
                       
@@ -187,11 +200,13 @@ type_bin <- function(df){
 # @param: data dataframe: dataframe to be wrangled, must include columns - "manufacturer", "type" & "year"
 wrangling_function<- function(data){
     new_data = type_bin(data)
+
     new_data = country_origin_transform(new_data)
+
     new_data = is_luxury_transform(new_data)
-    new_data = ageVehicle(new_data)
-    new_data = new_data%>%
-    select(-year)
+
+    mutate(new_data, age =  ageVehicle(new_data))
+
     return(new_data)
     }
 
