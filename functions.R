@@ -212,13 +212,16 @@ wrangling_function<- function(data){
     
     new_data = mutate(new_data, countryOrigin = as.character(countryOrigin))%>%
     mutate_if(sapply(., is.character), as.factor) #factorizes <chr> variables
-    new_data = subset(new_data, select = -c(year))
+    
+    new_data = new_data %>% mutate(sqrt_odometer = sqrt(odometer))
+    
+    new_data = subset(new_data, select = -c(year,odometer,manufacturer))
     return(new_data)
     }
                       
 ## Function to perform feature selection and return dataset
 feature_selection = function(data){
-    new_data = subset(data, select = c(price, age, fuel, drive, type, manufacturer))
+    new_data = subset(data, select = c(price, age, fuel, drive, type, countryOrigin, isLuxury))
     return(new_data)
     }
 
