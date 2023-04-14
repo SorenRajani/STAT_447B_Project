@@ -213,9 +213,7 @@ wrangling_function<- function(data){
     new_data = mutate(new_data, countryOrigin = as.character(countryOrigin))%>%
     mutate_if(sapply(., is.character), as.factor) #factorizes <chr> variables
     
-    new_data = new_data %>% mutate(sqrt_odometer = sqrt(odometer)) %>% select(-odometer)
-    
-    new_data = subset(new_data, select = -c(year))
+    new_data = subset(new_data, select = -c(year,odometer,manufacturer))
     return(new_data)
     }
                       
