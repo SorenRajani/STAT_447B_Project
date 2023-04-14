@@ -135,7 +135,8 @@ country_of_orign<- function(manufacturer){
         "tesla" = "USA",
         "toyota"  = "Japan",
         "volkswagen" = "Germany",
-        "volvo" = "Sweden")
+        "volvo" = "Sweden",
+        "morgan" = "UK")
     return(unlist(originCountry, use.names = FALSE))
     
     }
@@ -155,7 +156,7 @@ is_domestic<- function(originCountry){
 # @return: is_luxury_brand binary: a binary variable indicating if the manufacturer is a luxury brand
 is_luxury<- function(manufacturer){
     luxury_brands = list("acura", "alfa-romeo", "aston-martin", "audi", "bmw", "ferrari", "harley-davidson", "infiniti",
-                         "jaguar", "land rover", "lexus", "lincoln", "mercedes-benz", "mini", "mogran", "porsche", "rover",
+                         "jaguar", "land rover", "lexus", "lincoln", "mercedes-benz", "mini", "morgan", "porsche", "rover",
                          "tesla", "volvo")
     is_luxury_brand = ifelse(manufacturer %in% luxury_brands, 1, 0)
 
@@ -172,6 +173,7 @@ country_origin_transform<-function(data){
     country = sapply(data$manufacturer, function(i) country_of_orign(i))
     new_data = data%>%
         mutate(countryOrigin = country)
+    new_data$countryOrigin = new_data$countryOrigin
     return(new_data)             
     }
                       
