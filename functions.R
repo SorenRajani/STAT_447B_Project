@@ -22,7 +22,7 @@ IS = (sumlength+sumlow+sumhigh)/n # average length + average under/over penaltie
 cover = mean(actual>= predObj[,2] & actual<=predObj[,3])
 summ = c(level,avglength,IS,cover) # summary with level, average length, interval score, coverage rate
 imiss = which(ilow | ihigh)
-list(summary=summ, imiss=imiss)
+list(summary=summ)
 }
                       
 ## Function to perform K-fold valdiation and produces AUC measure for each fold
@@ -52,8 +52,8 @@ kFold = function(Kfold, seed, datafr)
   if(k==Kfold) { ihigh = n }
   ifold = iperm[ilow:ihigh]
   holdo = datafr[ifold,]
-  train = datafra[-ifold,]
-  reg[[k]] = myTrain(data = train)
+  train = datafr[-ifold,]
+  reg[[k]] = myTrain(data = as.data.frame(train))
 #    switch( switchVar, 
 #                      glm(idefault~.-id, family=binomial(link="logit"), data=datafr[-ifold,]),
 #                      randomForest(idefault~.-id, data=datafr[-ifold,], ntree = 1000,
@@ -225,3 +225,4 @@ feature_selection = function(data){
     return(new_data)
     }
 
+## 
