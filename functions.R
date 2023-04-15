@@ -227,4 +227,26 @@ feature_selection = function(data){
     return(new_data)
     }
 
-## 
+#' @description
+#' Find group position for each element of a vector
+#'
+#' @param values vector which should values that depends on the group
+#' @param groupValues group values in the vector (hopefully unique)
+#' @param tolerance for matching equality
+#'
+#' @return group vector with membership label for each element of 'values' #'
+FindUniquePos = function(values, groupValues, tolerance=1.e-5){
+    ngroup = length(groupValues) # number of groups (terminal nodes)
+    temp = unique(groupValues)
+    if(length(temp)<ngroup){
+        cat("Won't work: non-unique group values\n"); return(0); }
+    npred = length(values) # number of cases to bin into a group label group = rep(0,npred) # initialize as group 0
+    group = rep(0,npred)
+    for(ig in 1:ngroup){
+        # group[values==groupValues[i]]=i # better to use tolerance
+        igroup = (abs(values-groupValues[ig])<tolerance)
+        group[igroup] = ig  # group label according to position in groupValues 
+    }
+    if( any(group==0) ) cat("Warning: some values not matched to groupValues\n")
+    return(group)
+    }
