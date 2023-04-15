@@ -223,7 +223,7 @@ wrangling_function<- function(data){
                       
 ## Function to perform feature selection and return dataset
 feature_selection = function(data){
-    new_data = subset(data, select = c(price, age, fuel, drive, type, countryOrigin, isLuxury))
+    new_data = subset(data, select = c(price, age, fuel, drive, type, cylinders))
     return(new_data)
     }
 
