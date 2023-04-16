@@ -1,6 +1,7 @@
 # STAT_447B_Project
 This is the repository for the STAT 447B project.
-The code used here requires a dataset which can be found here: https://www.kaggle.com/datasets/austinreese/craigslist-carstrucks-data
+The code used here requires a dataset which can be found here: https://www.kaggle.com/datasets/austinreese/craigslist-carstrucks-data (version 10).
+The csv containing the data is too large to upload (even after compression), to run these files download the kaggle dataset and run the files in their numbered sequence.
 It includes the following files:
 <ul>
 <li> 01-dataClean.ipynb : an ipython notebook which contains a function to clean the data. It produces 02-vehicles-cleaned.csv </li>
