@@ -16,5 +16,6 @@ It includes the following files:
 <li> 05e-LR_with_interactions.ipynb: a notebook which compares linear models with interactions over k fold cv</li>
 <li> 06-Validation.ipynb: A notebook which takes the best models from the 05 series of notebooks and examines their model assumptions and compares them over the holdout </li>
 <li> 05d-RF.rds: a saved model containing the random forest model trained on the full training set. This was done to save computational time in 06-Validation.ipynb </li>
+<li> 06-Validation.ipynb: a notebook detailing to validation process and comparing methods on the holdout set. </li>
 <li> functions.R: a repository of commonly called functions </li>
 </ul>
